@@ -1,4 +1,4 @@
-module github.com/VictoriaMetrics/metrics
+module github.com/chou-godaddy/vmmetrics
 
 require (
 	github.com/gdcorp-domains/fulfillment-gosecrets v1.0.18

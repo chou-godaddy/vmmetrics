@@ -1,9 +1,8 @@
 package metrics_test
 
 import (
+	"github.com/chou-godaddy/vmmetrics"
 	"net/http"
-
-	"github.com/VictoriaMetrics/metrics"
 )
 
 func ExampleWritePrometheus() {

@@ -2,9 +2,8 @@ package metrics_test
 
 import (
 	"fmt"
+	"github.com/chou-godaddy/vmmetrics"
 	"time"
-
-	"github.com/VictoriaMetrics/metrics"
 )
 
 func ExampleHistogram() {
