@@ -31,12 +31,14 @@ type VMMetricsMonitor interface {
 type Monitor struct {
 	storageURL         string
 	pushInterval       time.Duration
+	disablePush        bool
 	disableCompression bool
 	processMetrics     bool
 	extraLabels        []labels
 	httpClient         *http.Client
 	stopChan           chan struct{}
 	wg                 sync.WaitGroup
+	set                *Set
 
 	ctx    context.Context
 	cancel context.CancelFunc
@@ -89,6 +91,11 @@ func (m *Monitor) Start(ctx context.Context) error {
 	}
 
 	m.ctx = ctx
+
+	if m.disablePush {
+		log.Printf("[METRICS] Push to VictoriaMetrics is disabled. Metrics will not be pushed.")
+		return nil
+	}
 
 	err := InitPushWithOptions(ctx, m.storageURL, m.pushInterval, m.processMetrics, opts)
 	if err != nil {
@@ -145,6 +152,15 @@ func WithStorageURL(url string) MonitorOption {
 func WithPushInterval(interval time.Duration) MonitorOption {
 	return func(m *Monitor) {
 		m.pushInterval = interval
+	}
+}
+
+// WithDisablePush disables the push functionality of the Monitor.
+//
+// When disabled, metrics will not be pushed to the storage URL.
+func WithDisablePush(disable bool) MonitorOption {
+	return func(m *Monitor) {
+		m.disablePush = disable
 	}
 }
 
